@@ -1,4 +1,10 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {}
+// Load environment variables from .env file
+require('dotenv').config();
 
-module.exports = nextConfig
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  // You can add other Next.js configuration options here
+};
+
+module.exports = nextConfig;

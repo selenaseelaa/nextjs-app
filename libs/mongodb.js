@@ -7,9 +7,18 @@ const connectMongoDB = async () => {
     return;
   }
 
+  console.log('MONGO_PASSWORD:', process.env.MONGO_PASSWORD);
+
+  const password = process.env.MONGO_PASSWORD ? encodeURIComponent(process.env.MONGO_PASSWORD.trim()) : null;
+
+  if (!password) {
+    console.error("MONGO_PASSWORD environment variable is not set");
+    throw new Error("MONGO_PASSWORD environment variable is not set");
+  }
+
+  const connectionString = `mongodb+srv://naseelazahra:${password}@devcluster.2w5vig2.mongodb.net/?retryWrites=true&w=majority&appName=DevCluster`;
+
   try {
-    const password = encodeURIComponent(process.env.MONGO_PASSWORD.trim());
-    const connectionString = `mongodb+srv://integrationninjas:${password}@test.vjuinp4.mongodb.net/?retryWrites=true&w=majority`; // clustore url
     await mongoose.connect(connectionString, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
