@@ -29,8 +29,12 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        if: github.event_name == 'push'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ID }}
+          AWS_REGION: 'us-east-1'
         run: terraform plan -no-color
+        
         continue-on-error: true
       
       - name: Save Terraform Plan
