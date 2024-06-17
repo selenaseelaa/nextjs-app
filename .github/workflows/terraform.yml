@@ -2,20 +2,22 @@ name: 'Terraform'
 
 on:
   push:
-    branches: [ "awsterra" ]
+    branches: 
+        - awsterra
 
 jobs:
   terraform:
     name: 'Terraform'
+    runs-on: ubuntu-latest
     env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ID }}
-    runs-on: ubuntu-latest
-
+        AWS_REGION: 'us-east-1'
+    
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v2
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
