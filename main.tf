@@ -1,24 +1,33 @@
-data "aws_ami" "ubuntu" {
-  most_recent = true
-
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  owners = ["099720109477"] # Canonical
+provider "aws" {
+  region = "us-east-1"
 }
 
-resource "aws_instance" "web" {
-  ami           = data.aws_ami.ubuntu.id
-  instance_type = "t3.micro"
+resource "aws_security_group" "nextjs-app" {
+    name    = "launch-wizard-5"
+    vpc_id  = "vpc-0a89c09fe1a3fd0fe"
+
+    ingress {
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    ingress {
+      from_port = 3000
+      to_port   = 3000
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+}
+
+resource "aws_instance" "nextjs-app" {
+  ami               = "ami-04b70fa74e45c3917"
+  instance_type     = "t2.micro"
+  vpc_security_group_ids = [aws_security_group.nextjs-app.id]
+  key_name          = "ec2-key"
 
   tags = {
-    Name = "HelloWorld"
+    Name = "nextjs-app"
   }
 }
