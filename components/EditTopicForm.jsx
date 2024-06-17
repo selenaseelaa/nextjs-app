@@ -40,7 +40,7 @@ export default function EditTopicForm({ id, title, description }) {
         value={newTitle}
         className="border border-slate-500 px-8 py-2"
         type="text"
-        placeholder="Topic Title"
+        placeholder="Topic Title Test"
       />
 
       <input
