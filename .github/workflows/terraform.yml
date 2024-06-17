@@ -29,18 +29,13 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ID }}
-          AWS_REGION: 'us-east-1'
         run: terraform plan -no-color
-        
         continue-on-error: true
       
       - name: Save Terraform Plan
-        if: success()
-        run: echo "${{ steps.tf-plan.outputs.stdout }}" > tfplan
+        if: steps.plan.outcome == 'success'
+        run: echo "${{ steps.plan.outputs.stdout }}" > tfplan
 
       - name: Terraform Apply
-        if: success()
+        if: steps.plan.outcome == 'success'
         run: terraform apply -auto-approve tfplan
