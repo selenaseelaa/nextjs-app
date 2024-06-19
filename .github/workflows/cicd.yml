@@ -1,31 +1,91 @@
-name: Deploy Next.js application
+name: Deploy Next.js application to AWS
 
 on:
   push:
     branches:
-      - cicdterra
+      - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - name: Checkout Source
         uses: actions/checkout@v4
+
       - name: Create .env file
-        run: echo "MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }}" >> .env && echo "SITE_URL=${{ secrets.SITE_URL }}" >> .env
+        run: |
+          echo "MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }}" >> .env
+          echo "SITE_URL=${{ secrets.SITE_URL }}" >> .env
+
       - name: Build docker image
         run: docker build -t selenaseela/nextjs-app .
+
       - name: Login to docker hub
-        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+        run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
       - name: Publish image to docker hub
         run: docker push selenaseela/nextjs-app:latest
 
-  deploy:
+  terraform:
     needs: build
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_DEVOPS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_DEVOPS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_DEVOPS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_DEVOPS_SECRET_ACCESS_KEY }}
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_DEVOPS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_DEVOPS_SECRET_ACCESS_KEY }}
+
+  deploy:
+    needs: terraform
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_DEVOPS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_DEVOPS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
       - name: Pull image from docker hub
         run: docker pull selenaseela/nextjs-app:latest
-      - name: Delete old container
-        run: docker rm -f nextjs-app-container  
-      - name: Run docker container
-        run: docker run -d -p 3000:3000 --name nextjs-app-container selenaseela/nextjs-app
+
+      - name: Upload SSH Key
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > your-key.pem
+          chmod 600 your-key.pem
+
+      - name: Deploy to EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no -i your-key.pem ec2-user@${{ secrets.EC2_INSTANCE_PUBLIC_DNS }} << 'EOF'
+            docker pull selenaseela/nextjs-app:latest
+            docker rm -f nextjs-app-container || true
+            docker run -d -p 3000:3000 --name nextjs-app-container selenaseela/nextjs-app
+          EOF
+        env:
+          EC2_INSTANCE_PUBLIC_DNS: ${{ secrets.EC2_INSTANCE_PUBLIC_DNS }}
