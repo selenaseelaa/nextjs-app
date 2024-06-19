@@ -4,7 +4,6 @@ WORKDIR /app
 COPY package*.json ./
 RUN  npm install --production
 COPY . .
-ENV NEXT_DISABLE_SWC=true
 RUN npm run build
 
 EXPOSE 3000
