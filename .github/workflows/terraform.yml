@@ -2,7 +2,7 @@ name: 'Terraform'
 
 on:
   push:
-    branches: [ "awsterra" ]
+    branches: [ "cicdterra" ]
 
 jobs:
   terraform:
