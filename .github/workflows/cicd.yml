@@ -33,7 +33,7 @@ jobs:
           docker run --rm selenaseela/nextjs-app:latest sh -c "npm install && npm test"
 
   deploy:
-    needs: build
+    needs: test
     runs-on: self-hosted
     steps:
       - name: Pull image from docker hub
