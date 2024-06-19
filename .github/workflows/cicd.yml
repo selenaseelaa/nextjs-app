@@ -83,7 +83,7 @@ jobs:
 
       - name: Deploy to EC22
         run: |
-          ssh -o StrictHostKeyChecking=no -i "ec2-key.pem" ubuntu@your-ec2-instance-public-dns << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i "ec2-key.pem" ubuntu@ec2-54-163-34-151.compute-1.amazonaws.com << 'EOF'
             docker pull selenaseela/nextjs-app:latest
             docker rm -f nextjs-app-container || true
             docker run -d -p 3000:3000 --name nextjs-app-container selenaseela/nextjs-app
