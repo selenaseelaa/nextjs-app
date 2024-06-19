@@ -55,7 +55,7 @@ export default function TopicsList() {
         <table className="table-auto w-full">
           <thead>
             <tr className="bg-slate-200 text-left">
-              <th className="py-3 px-4">S.No.</th>
+              <th className="py-3 px-4">No.</th>
               <th className="py-3 px-4">Title</th>
               <th className="py-3 px-4">Description</th>
               <th className="py-3 px-4">Actions</th>
