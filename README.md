@@ -127,5 +127,5 @@ docker run -d -p 3000:3000 --name nextjs-app <docker-image-name>
 Make sure to replace <repository-url>, <project-directory>, <docker-image-name>, <mongo-password>, <site-url>, <ec2-key.pem>, <ec2-public-dns>, and <ec2-public-ip> with appropriate values for your project. Following these steps will manually deploy your Next.js application on AWS EC2 using Docker and Terraform.
 ```
 
-###For further information or documentation about this project visit link below:
-https://github.com/users/selenaseelaa/projects/5
+**For further information or documentation about this project visit link below:
+https://github.com/users/selenaseelaa/projects/5**
