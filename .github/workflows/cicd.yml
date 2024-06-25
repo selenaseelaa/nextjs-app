@@ -3,7 +3,7 @@ name: Deploy Next.js application to AWS
 on:
   push:
     branches:
-      - terra3
+      - dev
 
 jobs:
   build:
