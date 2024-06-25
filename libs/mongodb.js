@@ -11,6 +11,7 @@ const connectMongoDB = async () => {
 
   const password = process.env.MONGO_PASSWORD ? encodeURIComponent(process.env.MONGO_PASSWORD.trim()) : null;
 
+  //tambah
   if (!password) {
     console.error("MONGO_PASSWORD environment variable is not set");
     throw new Error("MONGO_PASSWORD environment variable is not set");
