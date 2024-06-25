@@ -30,7 +30,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Kontainer sebelah kanan hey */}
+      {/* Kontainer sebelah kanan */}
       <div className="w-3/4 mr-20 bg-white rounded-lg shadow-md h-[500px]">
 
          <div className="m-10">
