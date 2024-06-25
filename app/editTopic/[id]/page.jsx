@@ -20,7 +20,7 @@ const getTopicById = async (id) => {
 export default async function EditTopic({ params }) {
   const { id } = params;
   const { topic } = await getTopicById(id);
-  const { title, description } = topic; //adf
+  const { tanggal, suhu, berat_badan, tekanan_darah, catatan_tambahan } = topic;
 
-  return <EditTopicForm id={id} title={title} description={description} />;
+  return <EditTopicForm id={id} tanggal={tanggal} suhu={suhu} berat_badan={berat_badan} tekanan_darah={tekanan_darah} catatan_tambahan={catatan_tambahan} />;
 }

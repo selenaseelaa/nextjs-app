@@ -23,14 +23,6 @@ const getTopics = async () => {
 };
 
 export default function TopicsList() {
-
-  // let topics = [];
-  // try{
-  //   const data = await getTopics();
-  //   if(data) topics = data.topics;
-  // } catch (err) {
-  //   console.error('Error fetching topics', err);
-  // }
   const [topics, setTopics] = useState([]);
 
   useEffect(() => {
@@ -49,34 +41,48 @@ export default function TopicsList() {
 
   console.log("Rendered topics:", topics); // Log rendered topics
 
+  // // Function to format date from ISO 8601 to YYYY-MM-DD
+  // const formatDate = (isoDate) => {
+  //   const date = new Date(isoDate);
+  //   return date.toISOString().split('T')[0];
+  // };
+
   return (
     <div className="flex justify-center">
       {topics.length > 0 ? (
-        <table className="table-auto w-full">
-          <thead>
-            <tr className="bg-slate-200 text-left">
-              <th className="py-3 px-4">No.</th>
-              <th className="py-3 px-4">Title</th>
-              <th className="py-3 px-4">Description</th>
-              <th className="py-3 px-4">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {topics.map((t, index) => (
-              <tr key={t._id}>
-                <td className="py-3 px-4 border-b border-slate-300">{index + 1}</td> {/* Add sequence number */}
-                <td className="py-3 px-4 border-b border-slate-300">{t.title}</td>
-                <td className="py-3 px-4 border-b border-slate-300">{t.description}</td>
-                <td className="py-3 px-4 border-b border-slate-300 flex gap-2">
-                  <RemoveBtn id={t._id} />
-                  <Link href={`${SITE_URL}/editTopic/${t._id}`}>
-                    <HiPencilAlt size={24} />
-                  </Link>
-                </td>
+        <div className="overflow-auto max-h-[400px] w-full">
+          <table className="table-auto w-full">
+            <thead>
+              <tr className="bg-slate-200 text-center">
+                <th className="py-3 px-4">No.</th>
+                <th className="py-3 px-4">Tanggal</th>
+                <th className="py-3 px-4">Suhu (Celcius)</th>
+                <th className="py-3 px-4">Berat Badan (kg)</th>
+                <th className="py-3 px-4">Tekanan Darah (sistol/diastol)</th>
+                <th className="py-3 px-4">Catatan Tambahan</th>
+                <th className="py-3 px-4"></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {topics.map((t, index) => (
+                <tr key={t._id} className='h-20'>
+                  <td className="py-3 border-b border-slate-300 text-center">{index + 1}</td> {/* Add sequence number */}
+                  <td className="w-50 border-b border-slate-300 text-center text-sm">{t.tanggal}</td>
+                  <td className="py-3 border-b border-slate-300 text-center">{t.suhu}</td>
+                  <td className="py-3 border-b border-slate-300 text-center">{t.berat_badan}</td>
+                  <td className="py-3 border-b border-slate-300 text-center">{t.tekanan_darah}</td>
+                  <td className="py-3 px-4 border-b border-slate-300 text-center w-60 max-h-1 overflow-y-auto">{t.catatan_tambahan}</td>
+                  <td className="py-3 px-4 border-b border-slate-300">
+                    <RemoveBtn id={t._id} />
+                    <Link href={`${SITE_URL}/editTopic/${t._id}`}>
+                      <HiPencilAlt size={24} />
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       ) : null} {/* Render nothing if no topics */}
     </div>
   );

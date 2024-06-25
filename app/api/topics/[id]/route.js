@@ -4,9 +4,9 @@ import { NextResponse } from "next/server";
 
 export async function PUT(request, { params }) {
   const { id } = params;
-  const { newTitle: title, newDescription: description } = await request.json();
+  const { newTanggal: tanggal, newSuhu: suhu, newBB: berat_badan, newTensa: tekanan_darah, newDescription: catatan_tambahan } = await request.json();
   await connectMongoDB();
-  await Topic.findByIdAndUpdate(id, { title, description });
+  await Topic.findByIdAndUpdate(id, {tanggal, suhu, berat_badan, tekanan_darah, catatan_tambahan });
   return NextResponse.json({ message: "Topic updated" }, { status: 200 });
 }
 
