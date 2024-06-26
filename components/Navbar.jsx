@@ -5,7 +5,7 @@ export default function Navbar() {
     <nav className="flex items-center px-10 py-3 h-[80px]">
       <img src="/logo.jpeg" alt="Logo" className="h-20 w-20" />
       <Link className="text-black font-bold" href={"/"}>  
-        Catatan Sesi Cuci Darah (Hemodialisis).
+        Catatan Sesi Cuci Darah (Hemodialisiss).
       </Link>
     </nav>
   );
