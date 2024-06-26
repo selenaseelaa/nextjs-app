@@ -1,4 +1,4 @@
-// Load environment variables from .env file
+// Load environment variables from .env file tambah aja
 require('dotenv').config();
 
 /** @type {import('next').NextConfig} */
